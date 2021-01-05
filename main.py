@@ -1,9 +1,10 @@
 import requests
+import html
 from twilio.rest import Client
 from config import *
 
-STOCK_NAME = "TSLA"
-COMPANY_NAME = "Tesla Inc"
+STOCK_NAME = "AAPL"
+COMPANY_NAME = "Apple Inc"
 
 STOCK_ENDPOINT = "https://www.alphavantage.co/query"
 NEWS_ENDPOINT = "https://newsapi.org/v2/everything"
@@ -45,8 +46,8 @@ if abs(percentage_difference) > 1:
     three_articles = articles[:3]
     print(three_articles)
 
-    formatted_articles = [f"{STOCK_NAME}: {up_down}{percentage_difference}%\n"
-                          f"Headline: {article['title']}.\nBrief: {article['description']}"
+    formatted_articles = [f"{STOCK_NAME}: {up_down}{percentage_difference}%\n\n"
+                          f"Headline: {article['title']}.\n\nBrief: {article['description']}"
                           for article in three_articles]
     print(formatted_articles)
 
@@ -54,7 +55,7 @@ if abs(percentage_difference) > 1:
 
     for article in formatted_articles:
         message = client.messages.create(
-            body=article,
+            body=html.unescape(article),
             from_="+12673694355",
             to="13166557807"
         )
